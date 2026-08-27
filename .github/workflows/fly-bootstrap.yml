@@ -70,7 +70,7 @@ jobs:
           flyctl volumes create "$FLY_VOLUME" \
             --app "$FLY_APP" \
             --region "$FLY_REGION" \
-            --size 10 \
+            --size 1 \
             --yes
 
       - name: Set OmniRoute application secrets
