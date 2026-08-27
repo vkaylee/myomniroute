@@ -26,3 +26,4 @@ primary_region = 'sin'
   HOST = "0.0.0.0"
   HOSTNAME = "0.0.0.0"
   BIND = "0.0.0.0"
+  NEXT_PUBLIC_BASE_URL = "https://leeomniroute.fly.dev"
