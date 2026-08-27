@@ -19,8 +19,6 @@ primary_region = 'sin'
   auto_stop_machines = 'stop'
   auto_start_machines = true
 
-[[vm]]
-  memory = '256mb'
 
 [env]
   DATA_DIR = "/data"
