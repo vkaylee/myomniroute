@@ -73,24 +73,29 @@ jobs:
             --size 10 \
             --yes
 
-      - name: Set application secrets
+      - name: Set OmniRoute application secrets
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_BOOTSTRAP_TOKEN }}
           INITIAL_PASSWORD: ${{ secrets.INITIAL_PASSWORD }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           API_KEY_SECRET: ${{ secrets.API_KEY_SECRET }}
           MACHINE_ID_SALT: ${{ secrets.MACHINE_ID_SALT }}
+          STORAGE_ENCRYPTION_KEY: ${{ secrets.STORAGE_ENCRYPTION_KEY }}
+          OMNIROUTE_WS_BRIDGE_SECRET: ${{ secrets.OMNIROUTE_WS_BRIDGE_SECRET }}
         run: |
-          : "${INITIAL_PASSWORD:?Missing INITIAL_PASSWORD secret}"
           : "${JWT_SECRET:?Missing JWT_SECRET secret}"
           : "${API_KEY_SECRET:?Missing API_KEY_SECRET secret}"
-          : "${MACHINE_ID_SALT:?Missing MACHINE_ID_SALT secret}"
-          flyctl secrets set \
-            "INITIAL_PASSWORD=$INITIAL_PASSWORD" \
-            "JWT_SECRET=$JWT_SECRET" \
-            "API_KEY_SECRET=$API_KEY_SECRET" \
-            "MACHINE_ID_SALT=$MACHINE_ID_SALT" \
-            --app "$FLY_APP"
+          : "${OMNIROUTE_WS_BRIDGE_SECRET:?Missing OMNIROUTE_WS_BRIDGE_SECRET secret}"
+
+          secrets=(
+            "JWT_SECRET=$JWT_SECRET"
+            "API_KEY_SECRET=$API_KEY_SECRET"
+            "OMNIROUTE_WS_BRIDGE_SECRET=$OMNIROUTE_WS_BRIDGE_SECRET"
+          )
+          [ -z "$INITIAL_PASSWORD" ] || secrets+=("INITIAL_PASSWORD=$INITIAL_PASSWORD")
+          [ -z "$MACHINE_ID_SALT" ] || secrets+=("MACHINE_ID_SALT=$MACHINE_ID_SALT")
+          [ -z "$STORAGE_ENCRYPTION_KEY" ] || secrets+=("STORAGE_ENCRYPTION_KEY=$STORAGE_ENCRYPTION_KEY")
+          flyctl secrets set "${secrets[@]}" --app "$FLY_APP"
 
       - name: Deploy application
         env:
